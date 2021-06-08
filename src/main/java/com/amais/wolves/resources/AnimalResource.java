@@ -1,19 +1,19 @@
-package com.amais.resources;
+package com.amais.wolves.resources;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amais.domain.Animal;
-import com.amais.services.AnimalService;
+import com.amais.wolves.domain.Animal;
+import com.amais.wolves.repositories.AnimalQueryParameters;
+import com.amais.wolves.services.AnimalService;
 
 @RestController
 @RequestMapping(value="/animais")
@@ -32,6 +32,19 @@ public class AnimalResource {
 	public ResponseEntity<?> findAll() {
 		
 		List<Animal> animais = service.findAll();		
+		return ResponseEntity.ok().body(animais);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<?> findAllByFilter(@RequestBody AnimalQueryParameters filterForm) {
+		List<Animal> animais = service.findAllByFilter(filterForm);
+		
+//		List<Animal> animais = service.findAll();
+//		HttpHeaders responseHeaders = new HttpHeaders();
+//		responseHeaders.add("Access-Control-Allow-Origin", "http://localhost:3000");
+//		return ResponseEntity.ok().headers(responseHeaders).body(animais);
+		
 		return ResponseEntity.ok().body(animais);
 	}
 }

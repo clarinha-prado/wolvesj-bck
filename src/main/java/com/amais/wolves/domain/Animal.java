@@ -1,4 +1,4 @@
-package com.amais.domain;
+package com.amais.wolves.domain;
 
 import java.io.Serializable;
 import java.util.Date;
