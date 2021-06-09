@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amais.wolves.domain.Animal;
+import com.amais.wolves.dto.IAnimalDTO;
 import com.amais.wolves.repositories.AnimalQueryParameters;
 import com.amais.wolves.services.AnimalService;
 
@@ -38,7 +39,7 @@ public class AnimalResource {
 	@CrossOrigin
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<?> findAllByFilter(@RequestBody AnimalQueryParameters filterForm) {
-		List<Animal> animais = service.findAllByFilter(filterForm);
+		List<IAnimalDTO> animais = service.findAllByFilter(filterForm);
 		
 //		List<Animal> animais = service.findAll();
 //		HttpHeaders responseHeaders = new HttpHeaders();

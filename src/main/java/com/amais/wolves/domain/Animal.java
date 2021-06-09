@@ -1,7 +1,7 @@
 package com.amais.wolves.domain;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +22,8 @@ public class Animal implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String nm_animal;
-	private Date dt_provavel_nasc;
-	private Date dt_acolhimento;
+	private LocalDate dt_provavel_nasc;
+	private LocalDate dt_acolhimento;
 	private Short especie;
 	private String raca;
 	private Short sexo;
@@ -38,7 +38,7 @@ public class Animal implements Serializable {
 	
 	public Animal() {};
 	
-	public Animal(Integer id, String nm_animal, Date dt_provavel_nasc, Date dt_acolhimento, Short especie, String raca,
+	public Animal(Integer id, String nm_animal, LocalDate dt_provavel_nasc, LocalDate dt_acolhimento, Short especie, String raca,
 			Short sexo, String pelagem, Short porte, String caracteristicas, Short castrado, String historia,
 			String localizacao, short situacao, String apelidos) {
 		super();
@@ -64,16 +64,16 @@ public class Animal implements Serializable {
 	public void setNm_animal(String nm_animal) {
 		this.nm_animal = nm_animal;
 	}
-	public Date getDt_provavel_nasc() {
+	public LocalDate getDt_provavel_nasc() {
 		return dt_provavel_nasc;
 	}
-	public void setDt_provavel_nasc(Date dt_provavel_nasc) {
+	public void setDt_provavel_nasc(LocalDate dt_provavel_nasc) {
 		this.dt_provavel_nasc = dt_provavel_nasc;
 	}
-	public Date getDt_acolhimento() {
+	public LocalDate getDt_acolhimento() {
 		return dt_acolhimento;
 	}
-	public void setDt_acolhimento(Date dt_acolhimento) {
+	public void setDt_acolhimento(LocalDate dt_acolhimento) {
 		this.dt_acolhimento = dt_acolhimento;
 	}
 	public Short getEspecie() {

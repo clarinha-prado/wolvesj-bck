@@ -1,6 +1,8 @@
 package com.amais.wolves.repositories;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AnimalQueryParameters {
@@ -13,6 +15,33 @@ public class AnimalQueryParameters {
 	private String de1a5; 
 	private String de5a10; 
 	private String acima10;
+	
+	// calcular datas p usar com intervalo de busca
+	private LocalDate today = LocalDate.now();
+	private LocalDate oneYearAgo = LocalDate.now().minusYears(1);
+	private LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
+	private LocalDate tenYearsAgo = LocalDate.now().minusYears(10);
+	private LocalDate aLongTimeAgo = LocalDate.now().minusYears(100);
+	
+	// todas as combinações possíveis
+	private LocalDate[][] combination = {
+			{today, aLongTimeAgo, null, null},
+			{tenYearsAgo, aLongTimeAgo, null, null},
+			{fiveYearsAgo, tenYearsAgo, null, null},
+			{fiveYearsAgo, aLongTimeAgo, null, null},
+			{oneYearAgo, fiveYearsAgo, null, null},
+			{oneYearAgo, fiveYearsAgo, tenYearsAgo, aLongTimeAgo},
+			{oneYearAgo, tenYearsAgo, null, null},
+			{oneYearAgo, aLongTimeAgo, null, null},
+			{today, oneYearAgo, null, null},
+			{today, oneYearAgo, tenYearsAgo, aLongTimeAgo},
+			{today, oneYearAgo, fiveYearsAgo, tenYearsAgo},
+			{today, oneYearAgo, fiveYearsAgo, aLongTimeAgo},
+			{today, fiveYearsAgo, null, null},
+			{today, fiveYearsAgo, tenYearsAgo, aLongTimeAgo},
+			{today, tenYearsAgo, null, null},
+			{today, aLongTimeAgo, null, null}
+	};
 	
 	public AnimalQueryParameters(String p, String m, String g, String female, String male, String ate1, String de1a5,
 			String de5a10, String acima10) {
@@ -38,7 +67,53 @@ public class AnimalQueryParameters {
 		if (g.equals("1"))
 			sizes.add(Integer.valueOf(2).shortValue());
 		
+		// se nenhum tamanho foi selecionado, deve-se procurar em todos os tamanhos
+		if (sizes.size() == 0) {
+			sizes.add(Integer.valueOf(0).shortValue());
+			sizes.add(Integer.valueOf(1).shortValue());
+			sizes.add(Integer.valueOf(2).shortValue());
+		}
+		
 		return sizes;
+	}
+	
+	public List<Short> getGenders() {
+		List<Short> genders = new ArrayList<Short>();
+
+		if (female.equals("1"))
+			genders.add(Integer.valueOf(0).shortValue());
+		if (male.equals("1"))
+			genders.add(Integer.valueOf(1).shortValue());
+		
+		// se nenhum gênero foi selecionado, deve-se procurar em todos os gêneros
+		if (genders.size() == 0) {
+			genders.add(Integer.valueOf(0).shortValue());
+			genders.add(Integer.valueOf(1).shortValue());
+		}
+		
+		return genders;
+	}
+	
+	public HashMap<String, LocalDate> getAges() {
+		// get the ages selected and converts as if it was a binary number of 4 positions
+		int selection = 0;
+		if (acima10.equals("1"))
+			selection +=1;
+		if (de5a10.equals("1"))
+			selection +=2;
+		if (de1a5.equals("1"))
+			selection +=4;
+		if (ate1.equals("1"))
+			selection +=8;
+		
+		// get date(s) interval(s) that should be searched in
+		HashMap<String, LocalDate> ranges = new HashMap<String, LocalDate>();
+		ranges.put("from1", combination[selection][1]);
+		ranges.put("to1", combination[selection][0]);
+		ranges.put("from2", combination[selection][3]);
+		ranges.put("to2", combination[selection][2]);
+		
+		return ranges;
 	}
 
 	public String getP() {
