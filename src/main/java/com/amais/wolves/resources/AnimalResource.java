@@ -3,6 +3,7 @@ package com.amais.wolves.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class AnimalResource {
 	@CrossOrigin
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<?> findAllByFilter(@RequestBody AnimalQueryParameters filterForm) {
-		List<IAnimalDTO> animais = service.findAllByFilter(filterForm);
+		Page<IAnimalDTO> animais = service.findAllByFilter(filterForm);
 		
 //		List<Animal> animais = service.findAll();
 //		HttpHeaders responseHeaders = new HttpHeaders();
