@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amais.wolves.domain.Animal;
@@ -39,8 +40,11 @@ public class AnimalResource {
 	
 	@CrossOrigin
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<?> findAllByFilter(@RequestBody AnimalQueryParameters filterForm) {
-		Page<IAnimalDTO> animais = service.findAllByFilter(filterForm);
+	public ResponseEntity<Page<IAnimalDTO>> findAllByFilter(
+			@RequestBody AnimalQueryParameters filterForm,
+			@RequestParam(value="newPage", defaultValue="0") Integer newPage,
+			@RequestParam(value="perPage", defaultValue="12") Integer perPage) {
+		Page<IAnimalDTO> animais = service.findAllByFilter(filterForm, newPage, perPage);
 		
 //		List<Animal> animais = service.findAll();
 //		HttpHeaders responseHeaders = new HttpHeaders();

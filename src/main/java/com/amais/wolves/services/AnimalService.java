@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.amais.util.Logger;
@@ -31,9 +32,9 @@ public class AnimalService {
 		return repo.findAll();
 	}
 	
-	public Page<IAnimalDTO> findAllByFilter(AnimalQueryParameters filterForm) {
+	public Page<IAnimalDTO> findAllByFilter(AnimalQueryParameters filterForm, Integer newPage, Integer perPage) {
 		
-		Pageable page = PageRequest.of(0, 4);
+		Pageable page = PageRequest.of(newPage, perPage, Direction.DESC, "dt_provavel_nasc");
 		
 		HashMap<String, LocalDate> dateInterval = filterForm.getAges();
 		
