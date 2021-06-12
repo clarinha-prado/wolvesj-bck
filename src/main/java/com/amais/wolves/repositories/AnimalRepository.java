@@ -18,9 +18,9 @@ import com.amais.wolves.dto.IAnimalDTO;
 public interface AnimalRepository extends JpaRepository<Animal, Integer>, JpaSpecificationExecutor<Animal> {
 	
 	@Query("select a from Animal a where "
-			+ "a.dt_provavel_nasc between ?1 and ?2 "
+			+ "(a.dt_provavel_nasc between ?1 and ?2 "
 			+ "and porte in ?3 "
-			+ "and sexo in ?4")
+			+ "and sexo in ?4) and situacao = 0")
 	Page<IAnimalDTO> findAllByDobInOneInterval(
 			LocalDate from, LocalDate to, 
 			List<Short> porte, 
@@ -28,14 +28,18 @@ public interface AnimalRepository extends JpaRepository<Animal, Integer>, JpaSpe
 			Pageable page);
 	
 	@Query("select a from Animal a where "
-			+ "((a.dt_provavel_nasc between ?1 and ?2) or (a.dt_provavel_nasc between ?3 and ?4)) "
+			+ "(((a.dt_provavel_nasc between ?1 and ?2) or (a.dt_provavel_nasc between ?3 and ?4)) "
 			+ "and porte in ?5 "
-			+ "and sexo in ?6")
+			+ "and sexo in ?6) and situacao = 0"
+			)
 	Page<IAnimalDTO> findAllByDobInTwoIntervals(
 			LocalDate from1, LocalDate to1, 
 			LocalDate from2, LocalDate to2, 
 			List<Short> porte, 
 			List<Short> sexo,
 			Pageable page);
+	
+	@Query("select id from Animal a where situacao= 0")
+	List<Integer> findAllIds();
 	
 }

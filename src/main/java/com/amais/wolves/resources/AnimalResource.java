@@ -26,16 +26,21 @@ public class AnimalResource {
 	private AnimalService service;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> get(@PathVariable Integer id) {
+	public ResponseEntity<Animal> get(@PathVariable Integer id) {
 		Animal animal = service.get(id);
 		return ResponseEntity.ok().body(animal);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<?> findAll() {
-		
+	public ResponseEntity<List<Animal>> findAll() {
 		List<Animal> animais = service.findAll();		
 		return ResponseEntity.ok().body(animais);
+	}
+	
+	@RequestMapping(value="/ids", method=RequestMethod.GET)
+	public ResponseEntity<List<Integer>> findAllIds(){
+		List<Integer> ids = service.findAllIds();
+		return ResponseEntity.ok().body(ids);
 	}
 	
 	@CrossOrigin

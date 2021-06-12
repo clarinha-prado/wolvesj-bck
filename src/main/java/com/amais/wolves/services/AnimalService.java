@@ -32,6 +32,10 @@ public class AnimalService {
 		return repo.findAll();
 	}
 	
+	public List<Integer> findAllIds() {
+		return repo.findAllIds();
+	}
+	
 	public Page<IAnimalDTO> findAllByFilter(AnimalQueryParameters filterForm, Integer newPage, Integer perPage) {
 		
 		Pageable page = PageRequest.of(newPage, perPage, Direction.DESC, "dt_provavel_nasc");
