@@ -26,8 +26,8 @@ public class AnimalResource {
 	private AnimalService service;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Animal> get(@PathVariable Integer id) {
-		Animal animal = service.get(id);
+	public ResponseEntity<Animal> findByIdAndSituacao(@PathVariable Integer id) {
+		Animal animal = service.findById(id);
 		return ResponseEntity.ok().body(animal);
 	}
 	
@@ -50,11 +50,6 @@ public class AnimalResource {
 			@RequestParam(value="newPage", defaultValue="0") Integer newPage,
 			@RequestParam(value="perPage", defaultValue="12") Integer perPage) {
 		Page<IAnimalDTO> animais = service.findAllByFilter(filterForm, newPage, perPage);
-		
-//		List<Animal> animais = service.findAll();
-//		HttpHeaders responseHeaders = new HttpHeaders();
-//		responseHeaders.add("Access-Control-Allow-Origin", "http://localhost:3000");
-//		return ResponseEntity.ok().headers(responseHeaders).body(animais);
 		
 		return ResponseEntity.ok().body(animais);
 	}

@@ -3,6 +3,7 @@ package com.amais.wolves.services;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import com.amais.wolves.domain.Animal;
 import com.amais.wolves.dto.IAnimalDTO;
 import com.amais.wolves.repositories.AnimalQueryParameters;
 import com.amais.wolves.repositories.AnimalRepository;
+import com.amais.wolves.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class AnimalService {
@@ -23,17 +25,19 @@ public class AnimalService {
 	@Autowired
 	private AnimalRepository repo;
 	
-	public Animal get(Integer id) {
-		Animal animal = repo.getById(id);
-		return animal;
-	}
-	
 	public List<Animal> findAll() {
 		return repo.findAll();
 	}
 	
 	public List<Integer> findAllIds() {
 		return repo.findAllIds();
+	}
+	
+	public Animal findById(Integer id) {
+
+		Optional<Animal> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Animal.class.getName()));
 	}
 	
 	public Page<IAnimalDTO> findAllByFilter(AnimalQueryParameters filterForm, Integer newPage, Integer perPage) {

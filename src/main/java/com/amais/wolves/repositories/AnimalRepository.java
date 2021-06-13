@@ -41,5 +41,4 @@ public interface AnimalRepository extends JpaRepository<Animal, Integer>, JpaSpe
 	
 	@Query("select id from Animal a where situacao= 0")
 	List<Integer> findAllIds();
-	
 }
