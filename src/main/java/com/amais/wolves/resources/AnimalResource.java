@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amais.wolves.domain.Animal;
 import com.amais.wolves.dto.IAnimalDTO;
-import com.amais.wolves.repositories.AnimalQueryParameters;
 import com.amais.wolves.services.AnimalService;
 
 @RestController
@@ -44,12 +42,14 @@ public class AnimalResource {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(value="/filter", method=RequestMethod.GET)
 	public ResponseEntity<Page<IAnimalDTO>> findAllByFilter(
-			@RequestBody AnimalQueryParameters filterForm,
-			@RequestParam(value="newPage", defaultValue="0") Integer newPage,
+			@RequestParam(value="sizes", defaultValue="0") Integer sizes,
+			@RequestParam(value="genders", defaultValue="0") Integer genders,
+			@RequestParam(value="ages", defaultValue="0") Integer ages,
+			@RequestParam(value="page", defaultValue="0") Integer page,
 			@RequestParam(value="perPage", defaultValue="12") Integer perPage) {
-		Page<IAnimalDTO> animais = service.findAllByFilter(filterForm, newPage, perPage);
+		Page<IAnimalDTO> animais = service.findAllByFilter(sizes, genders, ages, page, perPage);
 		
 		return ResponseEntity.ok().body(animais);
 	}

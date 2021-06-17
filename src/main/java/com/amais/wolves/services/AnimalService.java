@@ -40,20 +40,21 @@ public class AnimalService {
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Animal.class.getName()));
 	}
 	
-	public Page<IAnimalDTO> findAllByFilter(AnimalQueryParameters filterForm, Integer newPage, Integer perPage) {
+	public Page<IAnimalDTO> findAllByFilter(Integer sizes, Integer genders, Integer ages, Integer newPage, Integer perPage) {
 		
 		Pageable page = PageRequest.of(newPage, perPage, Direction.DESC, "dt_provavel_nasc");
 		
-		HashMap<String, LocalDate> dateInterval = filterForm.getAges();
+		AnimalQueryParameters queryParams = new AnimalQueryParameters(sizes, genders, ages);
+		HashMap<String, LocalDate> dateInterval = queryParams.getAges();
 		
-		Logger.debug("sizes: " + filterForm.getSizes().toString());
-		Logger.debug("genders: " + filterForm.getGenders().toString());
+		Logger.debug("sizes: " + queryParams.getSizes().toString());
+		Logger.debug("genders: " + queryParams.getGenders().toString());
 		Logger.debug("date interval: " + dateInterval.get("from1") + " até " + dateInterval.get("to1") );
 		
 		if (dateInterval.get("from2") == null)
 			return repo.findAllByDobInOneInterval(
 				dateInterval.get("from1"), dateInterval.get("to1"), 
-				filterForm.getSizes(), filterForm.getGenders(),
+				queryParams.getSizes(), queryParams.getGenders(),
 				page);
 		
 		else {
@@ -61,7 +62,7 @@ public class AnimalService {
 			return repo.findAllByDobInTwoIntervals(
 					dateInterval.get("from1"), dateInterval.get("to1"),
 					dateInterval.get("from2"), dateInterval.get("to2"), 
-					filterForm.getSizes(), filterForm.getGenders(),
+					queryParams.getSizes(), queryParams.getGenders(),
 					page);
 		}
 	}

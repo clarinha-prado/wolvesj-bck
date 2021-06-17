@@ -6,15 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AnimalQueryParameters {
-	private String p; 
-	private String m; 
-	private String g; 
-	private String female; 
-	private String male; 
-	private String ate1; 
-	private String de1a5; 
-	private String de5a10; 
-	private String acima10;
+	List<Short> sizes = new ArrayList<Short>();
+	List<Short> genders = new ArrayList<Short>();
+	HashMap<String, LocalDate> ranges = new HashMap<String, LocalDate>();
 	
 	// calcular datas p usar com intervalo de busca
 	private LocalDate today = LocalDate.now();
@@ -43,148 +37,54 @@ public class AnimalQueryParameters {
 			{today, aLongTimeAgo, null, null}
 	};
 	
-	public AnimalQueryParameters(String p, String m, String g, String female, String male, String ate1, String de1a5,
-			String de5a10, String acima10) {
+	public AnimalQueryParameters(Integer sizes, Integer genders, Integer ages) {
 		super();
-		this.p = p;
-		this.m = m;
-		this.g = g;
-		this.female = female;
-		this.male = male;
-		this.ate1 = ate1;
-		this.de1a5 = de1a5;
-		this.de5a10 = de5a10;
-		this.acima10 = acima10;
+		
+		// se nenhum tamanho tiver sido selecionado, procurar em todos os tamanhos
+		if (sizes == 0)
+			sizes = 7;
+		
+		// tamanhos representados em binário com 3 posições, representando, da esquerda para a direita
+		// p, m e g
+		// se foi selecionado tamanho p: (1** & 100), pois 4 em decimal = 100 em binário
+		if ((sizes & 4) == 4)
+			this.sizes.add(Integer.valueOf(0).shortValue());
+		if ((sizes & 2) == 2)
+			this.sizes.add(Integer.valueOf(1).shortValue());
+		if ((sizes & 1) == 1)
+			this.sizes.add(Integer.valueOf(2).shortValue());
+
+		// se nenhum gênero tiver sido selecionado, procurar em todos os gêneros
+		if (genders == 0)
+			genders = 3;
+		
+		// binário com suas posições 1*2^1=female  1*2^0=male
+		if ((genders & 2) == 2)
+			this.genders.add(Integer.valueOf(0).shortValue());
+		if ((genders & 1) == 1)
+			this.genders.add(Integer.valueOf(1).shortValue());
+
+		// se nenhum gênero tiver sido selecionado, procurar em todos os gêneros
+		if (ages == 0)
+			ages = 15;
+		
+		// binário com 4 posições para representar as faixas de idade
+		// get date(s) interval(s) that should be searched in
+		ranges.put("from1", combination[ages][1]);
+		ranges.put("to1", combination[ages][0]);
+		ranges.put("from2", combination[ages][3]);
+		ranges.put("to2", combination[ages][2]);
 	}
 	
 	public List<Short> getSizes() {
-		List<Short> sizes = new ArrayList<Short>();
-
-		if (p.equals("1"))
-			sizes.add(Integer.valueOf(0).shortValue());
-		if (m.equals("1"))
-			sizes.add(Integer.valueOf(1).shortValue());
-		if (g.equals("1"))
-			sizes.add(Integer.valueOf(2).shortValue());
-		
-		// se nenhum tamanho foi selecionado, deve-se procurar em todos os tamanhos
-		if (sizes.size() == 0) {
-			sizes.add(Integer.valueOf(0).shortValue());
-			sizes.add(Integer.valueOf(1).shortValue());
-			sizes.add(Integer.valueOf(2).shortValue());
-		}
-		
 		return sizes;
 	}
 	
 	public List<Short> getGenders() {
-		List<Short> genders = new ArrayList<Short>();
-
-		if (female.equals("1"))
-			genders.add(Integer.valueOf(0).shortValue());
-		if (male.equals("1"))
-			genders.add(Integer.valueOf(1).shortValue());
-		
-		// se nenhum gênero foi selecionado, deve-se procurar em todos os gêneros
-		if (genders.size() == 0) {
-			genders.add(Integer.valueOf(0).shortValue());
-			genders.add(Integer.valueOf(1).shortValue());
-		}
-		
 		return genders;
 	}
 	
 	public HashMap<String, LocalDate> getAges() {
-		// get the ages selected and converts as if it was a binary number of 4 positions
-		int selection = 0;
-		if (acima10.equals("1"))
-			selection +=1;
-		if (de5a10.equals("1"))
-			selection +=2;
-		if (de1a5.equals("1"))
-			selection +=4;
-		if (ate1.equals("1"))
-			selection +=8;
-		
-		// get date(s) interval(s) that should be searched in
-		HashMap<String, LocalDate> ranges = new HashMap<String, LocalDate>();
-		ranges.put("from1", combination[selection][1]);
-		ranges.put("to1", combination[selection][0]);
-		ranges.put("from2", combination[selection][3]);
-		ranges.put("to2", combination[selection][2]);
-		
 		return ranges;
 	}
-
-	public String getP() {
-		return p;
-	}
-
-	public void setP(String p) {
-		this.p = p;
-	}
-
-	public String getM() {
-		return m;
-	}
-
-	public void setM(String m) {
-		this.m = m;
-	}
-
-	public String getG() {
-		return g;
-	}
-
-	public void setG(String g) {
-		this.g = g;
-	}
-
-	public String getFemale() {
-		return female;
-	}
-
-	public void setFemale(String female) {
-		this.female = female;
-	}
-
-	public String getMale() {
-		return male;
-	}
-
-	public void setMale(String male) {
-		this.male = male;
-	}
-
-	public String getAte1() {
-		return ate1;
-	}
-
-	public void setAte1(String ate1) {
-		this.ate1 = ate1;
-	}
-
-	public String getDe1a5() {
-		return de1a5;
-	}
-
-	public void setDe1a5(String de1a5) {
-		this.de1a5 = de1a5;
-	}
-
-	public String getDe5a10() {
-		return de5a10;
-	}
-
-	public void setDe5a10(String de5a10) {
-		this.de5a10 = de5a10;
-	}
-
-	public String getAcima10() {
-		return acima10;
-	}
-
-	public void setAcima10(String acima10) {
-		this.acima10 = acima10;
-	} 
 }
